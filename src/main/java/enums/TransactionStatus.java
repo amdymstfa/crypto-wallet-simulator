@@ -15,4 +15,17 @@ public enum TransactionStatus {
 
     public String getStatus(){return status;}
     public String getDescription(){return description ;}
+
+    // define when a transaction can be done 
+    public boolean canTransiteTo(String newStatus){
+        switch(this){
+            case PENDING :
+                return newStatus == REJECTED || newStatus = CONFIRMED ;
+            case REJECTED :
+            case CONFIRMED :
+                return false ;
+            default :
+                return false;
+        }
+    }
 }
