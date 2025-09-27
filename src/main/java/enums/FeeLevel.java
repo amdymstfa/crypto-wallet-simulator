@@ -15,4 +15,10 @@ public enum FeeLevel {
 
     public double getMultiplier(){return multiplier ;}
     public String getDescription(){return description ;}
+
+
+    // define logic of fees
+    public double calculFee(double baseFee){
+        return baseFee*multiplier;
+    }
 }
