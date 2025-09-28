@@ -17,17 +17,17 @@ public enum CryptoType {
     }
 
     // define adress validation
-    public String isValidAdress(String adress){
-        if (adress == null || adress.trim().isEmpty()){
-            return false ;
-        }
+   public boolean isValidAddress(String address) {
+        if (address == null || address.trim().isEmpty()) return false;
 
-        switch(this){
-            case BITCOIN :
-                return adress.startWith("1") || adress.startWith("3") || adress.startWith("bc1");
-
-            case ETHEREUM :
-                return adress.startWith("0x") && address.length() == 42;
+        switch(this) {
+            case BITCOIN:
+                return address.startsWith("1") || address.startsWith("3") || address.startsWith("bc1");
+            case ETHEREUM:
+                return address.startsWith("0x") && address.length() == 42;
+            default:
+                return false;
         }
     }
+
 }

@@ -20,7 +20,7 @@ public enum TransactionStatus {
     public boolean canTransiteTo(String newStatus){
         switch(this){
             case PENDING :
-                return newStatus == REJECTED || newStatus = CONFIRMED ;
+                return newStatus == REJECTED || newStatus == CONFIRMED ;
             case REJECTED :
             case CONFIRMED :
                 return false ;
