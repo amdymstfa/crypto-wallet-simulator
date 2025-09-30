@@ -1,33 +1,36 @@
-package model ;
+package model;
 
-import enums.CryptoType ;
-import java.security.SecureRandom ;
+import enums.CryptoType;
+import java.security.SecureRandom;
 
+/**
+ * Bitcoin wallet implementation
+ */
 public class BitcoinWallet extends Wallet {
-
-    private static final SecureRandom randon = new SecureRandom();
-
-    public BitcoinWallet(){
+    
+    private static final SecureRandom random = new SecureRandom();
+    
+    /**
+     * Constructor for Bitcoin wallet
+     */
+    public BitcoinWallet() {
         super(CryptoType.BITCOIN);
     }
-
-    @Override 
-    public String generateAddress(){
-        // bitcoin must start with 1 3 bc1
-        String[] prefixes = {"1", "3", "bc1"};
-        // choice methode 
-        String prefix = prefixes[random.nextInt(prefixes.length)];
-
+    
+    /**
+     * Generates a Bitcoin address (simplified format starting with "1")
+     * @return A valid Bitcoin address
+     */
+    @Override
+    protected String generateAddress() {
+        // Simplified Bitcoin address generation (format "1")
+        StringBuilder address = new StringBuilder("1");
         String chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-
-        StringBuilder  address = new StringBuilder(prefix);
-
-        int length = prefix.equals("bc1") ? 39 : 33;
-
-        for (i = 0 ; i < length ; i++){
+        
+        for (int i = 0; i < 33; i++) {
             address.append(chars.charAt(random.nextInt(chars.length())));
         }
-
+        
         return address.toString();
     }
 }
