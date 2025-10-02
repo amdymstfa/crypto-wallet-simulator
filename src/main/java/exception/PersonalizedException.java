@@ -2,7 +2,7 @@ package exception;
 
 public class PersonalizedException extends Exception {
     // constructor for a simple exception for a clear message
-    public PersonalizedException(String message){
+    public PersonalizedException(String message) {
         super(message);
     }
 
@@ -11,7 +11,7 @@ public class PersonalizedException extends Exception {
         super(message, cause);
     }
 
-    public PersonalizedException(String firstMessage, String secondMessage){
-        super(firstMessage, secondMessage)
-    }
+    // public PersonalizedException(String firstMessage, String secondMessage){
+    //     super(firstMessage, secondMessage);
+    // }
 }
