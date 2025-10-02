@@ -1,30 +1,35 @@
-package enums ;
+package enums;
 
 public enum TransactionStatus {
-    PENDING("In progress" , "Waiting for validation"),
-    CONFIRMED("Confirmed", "Your transaction was valited with sucess"),
-    REJECTED("Rejected" , "Sorry, you transaction was refused");
-
-    private final String status ;
-    private final String description ;
-
-    public TransactionStatus(String status ,String description){
-        this.status = status ;
-        this.description = description ;
+    PENDING("En attente", "Transaction dans le mempool"),
+    CONFIRMED("Confirmée", "Transaction validée par les mineurs"),
+    REJECTED("Rejetée", "Transaction refusée");
+    
+    private final String displayName;
+    private final String description;
+    
+    TransactionStatus(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
     }
-
-    public String getStatus(){return status;}
-    public String getDescription(){return description ;}
-
-    // define when a transaction can be done 
-    public boolean canTransiteTo(String newStatus){
-        switch(this){
-            case PENDING :
-                return newStatus == REJECTED || newStatus == CONFIRMED ;
-            case REJECTED :
-            case CONFIRMED :
-                return false ;
-            default :
+    
+    public String getDisplayName() {
+        return displayName;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    
+    public boolean canTransitionTo(TransactionStatus newStatus) {
+        switch (this) {
+            case PENDING:
+                return newStatus == CONFIRMED || newStatus == REJECTED;
+            case CONFIRMED:
+            case REJECTED:
+                return false; 
+            default:
                 return false;
         }
     }
