@@ -1,25 +1,29 @@
-package exception ;
+package exception;
 
-public class InvalidAmountException extends Exception{
-
-    final final double invalidAmont ;
-
-    // case of null value 
-    public InvalidAmountException(String message){
-        super(message);
-        this.invalidAmont = 0.0 ;
-    }
-
-    // case of negative value 
-    public double InvalidAddressException(double invalidAmont){
-        super("Message : " + invalidAmont + "must be positif");
-        this.invalidAmont = invalidAmont ;
-    }
-
-    public double getInvalidAmont(){
-        return invalidAmont ;
-    }
-
+/**
+ * Exception levée quand un montant n'est pas valide
+ * (négatif, zéro, ou format incorrect)
+ */
+public class InvalidAmountException extends Exception {
     
-
+    private final double invalidAmount;
+    
+    public InvalidAmountException(String message) {
+        super(message);
+        this.invalidAmount = 0.0;
+    }
+    
+    public InvalidAmountException(double invalidAmount) {
+        super("Montant invalide : " + invalidAmount + ". Le montant doit être positif.");
+        this.invalidAmount = invalidAmount;
+    }
+    
+    public InvalidAmountException(String message, double invalidAmount) {
+        super(message);
+        this.invalidAmount = invalidAmount;
+    }
+    
+    public double getInvalidAmount() {
+        return invalidAmount;
+    }
 }
