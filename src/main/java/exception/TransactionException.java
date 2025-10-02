@@ -1,21 +1,20 @@
 package exception ;
 
-public class TransactionException extends Exception{
-
-    private final String transactionId ;
-
-    public TransactionException(String message){
+public class TransactionException extends Exception {
+    
+    private final String transactionId;
+    
+    public TransactionException(String message) {
         super(message);
-        this.transactionId = null ;
-        
+        this.transactionId = null;  
     }
-
-    public String getTransactionId(){return transactionId}
-
-    public String getDetailedMessage() {
-        if (transactionId != null) {
-            return "Transaction [" + transactionId + "]: " + getMessage();
-        }
-        return getMessage();
+    
+    public TransactionException(String message, String transactionId) {
+        super(message);
+        this.transactionId = transactionId;
+    }
+    
+    public String getTransactionId() {
+        return transactionId;
     }
 }
