@@ -2,6 +2,7 @@ package model;
 
 import enums.CryptoType;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 
 /**
  * Ethereum wallet implementation
@@ -15,6 +16,10 @@ public class EthereumWallet extends Wallet {
      */
     public EthereumWallet() {
         super(CryptoType.ETHEREUM);
+    }
+
+    public EthereumWallet(String id, String address, double balance, LocalDateTime createdAt) {
+        super(id, address, CryptoType.ETHEREUM, balance, createdAt);
     }
     
     /**
