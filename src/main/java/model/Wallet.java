@@ -37,6 +37,16 @@ public abstract class Wallet {
             id.substring(0, 8), type, address));
     }
     
+
+    protected Wallet(String id, String address, CryptoType type, double balance, LocalDateTime createdAt) {
+        this.id = id;
+        this.address = address;
+        this.type = type;
+        this.balance = balance;
+        this.createdAt = createdAt;
+        this.transactions = new ArrayList<>();
+    }
+
     // ===== GETTERS =====
     
     /**
