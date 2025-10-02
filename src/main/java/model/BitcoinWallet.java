@@ -2,6 +2,7 @@ package model;
 
 import enums.CryptoType;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 
 /**
  * Bitcoin wallet implementation
@@ -15,6 +16,10 @@ public class BitcoinWallet extends Wallet {
      */
     public BitcoinWallet() {
         super(CryptoType.BITCOIN);
+    }
+
+    public BitcoinWallet(String id, String address, double balance, LocalDateTime createdAt) {
+        super(id, address, CryptoType.BITCOIN, balance, createdAt);
     }
     
     /**
