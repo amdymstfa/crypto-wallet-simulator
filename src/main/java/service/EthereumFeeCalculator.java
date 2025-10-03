@@ -5,15 +5,15 @@ import enums.FeeLevel;
 import util.LoggerUtil;
 
 /**
- * Calculateur de frais spécifique pour Ethereum
- * Utilise : limite de gas × prix du gas
+ * Ethereum-specific fee calculator
+ * Formula: gas limit × gas price
  */
 public class EthereumFeeCalculator implements FeeCalculator {
     
-    // Paramètres Ethereum réalistes (valeurs fictives mais cohérentes)
-    private static final long GAS_LIMIT = 21000;  // Gas limit standard pour transfert ETH
-    private static final double GWEI_TO_ETH = 0.000000001;  // 1 Gwei = 0.000000001 ETH
-    private static final double BASE_GAS_PRICE_GWEI = 30.0;  // Prix base en Gwei
+    // Realistic Ethereum parameters (fictional but coherent)
+    private static final long GAS_LIMIT = 21000;       
+    private static final double GWEI_TO_ETH = 0.000000001;
+    private static final double BASE_GAS_PRICE_GWEI = 30.0; 
     
     @Override
     public double calculateFees(Transaction transaction) {
@@ -22,13 +22,13 @@ public class EthereumFeeCalculator implements FeeCalculator {
     
     @Override
     public double calculateFees(double amount, FeeLevel feeLevel) {
-        // Calcul Ethereum : gas limit × prix gas × multiplicateur de priorité
+        // Ethereum fee: gas limit × gas price × priority multiplier
         double gasPriceGwei = BASE_GAS_PRICE_GWEI * feeLevel.getMultiplier();
         double gasPriceEth = gasPriceGwei * GWEI_TO_ETH;
         double feesInETH = GAS_LIMIT * gasPriceEth;
         
         LoggerUtil.logFeeCalculation("ETHEREUM_CALC", feesInETH, 
-            String.format("Niveau: %s, Gas: %.2f Gwei", feeLevel, gasPriceGwei));
+            String.format("Level: %s, Gas: %.2f Gwei", feeLevel, gasPriceGwei));
         
         return feesInETH;
     }
@@ -44,7 +44,7 @@ public class EthereumFeeCalculator implements FeeCalculator {
     }
     
     /**
-     * Méthode spécifique Ethereum pour calculer avec gas limit personnalisé
+     * Ethereum-specific method to calculate fee with custom gas limit
      */
     public double calculateFeesWithGasLimit(long gasLimit, FeeLevel feeLevel) {
         double gasPriceGwei = BASE_GAS_PRICE_GWEI * feeLevel.getMultiplier();
@@ -53,18 +53,18 @@ public class EthereumFeeCalculator implements FeeCalculator {
     }
     
     /**
-     * Convertit un prix en Gwei vers ETH
+     * Convert Gwei to ETH
      */
     public double gweiToEth(double gwei) {
         return gwei * GWEI_TO_ETH;
     }
     
     /**
-     * Informations de debug sur les paramètres Ethereum
+     * Returns debug info about Ethereum fee calculation
      */
     public String getCalculationDetails(FeeLevel feeLevel) {
         double gasPriceGwei = BASE_GAS_PRICE_GWEI * feeLevel.getMultiplier();
-        return String.format("Ethereum - Gas Limit: %d, Prix: %.2f Gwei, Multiplicateur: %.1fx",
+        return String.format("Ethereum - Gas Limit: %d, Price: %.2f Gwei, Multiplier: %.1fx",
             GAS_LIMIT, gasPriceGwei, feeLevel.getMultiplier());
     }
 }

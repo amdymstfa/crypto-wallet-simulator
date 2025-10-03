@@ -8,7 +8,7 @@ import util.AddressValidator;
 import java.util.*;
 
 /**
- * Service de gestion des transactions
+ * Service to manage transactions
  */
 public class TransactionService {
     
@@ -21,32 +21,32 @@ public class TransactionService {
         this.transactions = new ArrayList<>();
         this.feeCalculators = new HashMap<>();
         
-        // Initialisation des calculateurs de frais
+        // Initialize fee calculators
         feeCalculators.put(CryptoType.BITCOIN, new BitcoinFeeCalculator());
         feeCalculators.put(CryptoType.ETHEREUM, new EthereumFeeCalculator());
         
-        LoggerUtil.logInfo("TransactionService initialisé avec calculateurs de frais");
+        LoggerUtil.logInfo("TransactionService initialized with fee calculators");
     }
     
     /**
-     * Crée une nouvelle transaction avec toutes les validations
+     * Create a new transaction with validations
      */
     public Transaction createTransaction(String fromAddress, String toAddress, 
-                                      double amount, CryptoType type, FeeLevel feeLevel) 
+                                         double amount, CryptoType type, FeeLevel feeLevel) 
             throws InvalidAddressException, InvalidAmountException, TransactionException {
         
-        // Validations
+        // Validate inputs
         validateTransactionInputs(fromAddress, toAddress, amount, type);
         
-        // Création de la transaction
+        // Create transaction
         Transaction transaction = new Transaction(fromAddress, toAddress, amount, type, feeLevel);
         
-        // Calcul des frais
+        // Calculate fees
         FeeCalculator calculator = feeCalculators.get(type);
         double fees = calculator.calculateFees(transaction);
         transaction.setFees(fees);
         
-        // Stockage
+        // Store transaction
         transactions.add(transaction);
         
         LoggerUtil.logTransaction(transaction.getId(), "CREATED", 
@@ -56,29 +56,29 @@ public class TransactionService {
     }
     
     /**
-     * Valide les données d'entrée pour une transaction
+     * Validate transaction inputs
      */
     private void validateTransactionInputs(String fromAddress, String toAddress, 
-                                         double amount, CryptoType type) 
+                                           double amount, CryptoType type) 
             throws InvalidAddressException, InvalidAmountException {
         
-        // Validation des adresses
+        // Validate addresses
         AddressValidator.validateAddress(fromAddress, type);
         AddressValidator.validateAddress(toAddress, type);
         
-        // Validation du montant
+        // Validate amount
         if (amount <= 0) {
             throw new InvalidAmountException(amount);
         }
         
-        // Vérification que les adresses sont différentes
+        // Ensure addresses are different
         if (fromAddress.equals(toAddress)) {
-            throw new InvalidAddressException("Les adresses source et destination doivent être différentes");
+            throw new InvalidAddressException("Source and destination addresses must be different");
         }
     }
     
     /**
-     * Compare les frais pour les 3 niveaux de priorité
+     * Compare fees for all 3 priority levels
      */
     public Map<FeeLevel, Double> compareFees(double amount, CryptoType type) {
         FeeCalculator calculator = feeCalculators.get(type);
@@ -89,12 +89,12 @@ public class TransactionService {
             comparison.put(level, fees);
         }
         
-        LoggerUtil.logInfo(String.format("Comparaison frais %s pour montant %.8f", type, amount));
+        LoggerUtil.logInfo(String.format("Fee comparison for %s and amount %.8f", type, amount));
         return comparison;
     }
     
     /**
-     * Trouve une transaction par son ID
+     * Find a transaction by ID
      */
     public Optional<Transaction> findById(String transactionId) {
         return transactions.stream()
@@ -103,7 +103,7 @@ public class TransactionService {
     }
     
     /**
-     * Liste toutes les transactions d'un type
+     * Get all transactions of a specific type
      */
     public List<Transaction> getTransactionsByType(CryptoType type) {
         return transactions.stream()
@@ -112,7 +112,7 @@ public class TransactionService {
     }
     
     /**
-     * Liste toutes les transactions d'un statut
+     * Get all transactions by status
      */
     public List<Transaction> getTransactionsByStatus(TransactionStatus status) {
         return transactions.stream()
@@ -121,7 +121,7 @@ public class TransactionService {
     }
     
     /**
-     * Met à jour le statut d'une transaction
+     * Update the status of a transaction
      */
     public void updateTransactionStatus(String transactionId, TransactionStatus newStatus) 
             throws TransactionException {
@@ -129,12 +129,12 @@ public class TransactionService {
         if (optTx.isPresent()) {
             optTx.get().setStatus(newStatus);
         } else {
-            throw new TransactionException("Transaction introuvable", transactionId);
+            throw new TransactionException("Transaction not found", transactionId);
         }
     }
     
     /**
-     * Statistiques des transactions
+     * Transaction statistics
      */
     public String getTransactionStats() {
         long pendingCount = transactions.stream()

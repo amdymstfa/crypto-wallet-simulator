@@ -8,7 +8,7 @@ import java.util.*;
 import java.security.SecureRandom;
 
 /**
- * Service de gestion du mempool et simulation réseau
+ * Service to manage the mempool and simulate network activity
  */
 public class MempoolService {
     
@@ -20,11 +20,11 @@ public class MempoolService {
         this.mempool = new Mempool();
         this.transactionService = transactionService;
         this.random = new SecureRandom();
-        LoggerUtil.logInfo("MempoolService initialisé");
+        LoggerUtil.logInfo("MempoolService initialized");
     }
     
     /**
-     * Ajoute une transaction au mempool
+     * Adds a transaction to the mempool
      */
     public void addTransaction(Transaction transaction) {
         mempool.addTransaction(transaction);
@@ -33,10 +33,10 @@ public class MempoolService {
     }
     
     /**
-     * Génère des transactions aléatoires pour simuler l'activité réseau
+     * Generates random transactions to simulate network activity
      */
     public void generateRandomTransactions(int count) {
-        LoggerUtil.logInfo(String.format("Génération de %d transactions aléatoires", count));
+        LoggerUtil.logInfo(String.format("Generating %d random transactions", count));
         
         String[] btcAddresses = {
             "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
@@ -59,41 +59,41 @@ public class MempoolService {
                     toAddr = addresses[random.nextInt(addresses.length)];
                 }
                 
-                double amount = 0.001 + (random.nextDouble() * 0.999); // 0.001 à 1.0
+                double amount = 0.001 + (random.nextDouble() * 0.999); // 0.001 to 1.0
                 FeeLevel feeLevel = FeeLevel.values()[random.nextInt(FeeLevel.values().length)];
                 
                 Transaction tx = transactionService.createTransaction(fromAddr, toAddr, amount, type, feeLevel);
                 mempool.addTransaction(tx);
                 
             } catch (Exception e) {
-                LoggerUtil.logError("Erreur lors de la génération de transaction aléatoire", e);
+                LoggerUtil.logError("Error generating random transaction", e);
             }
         }
     }
     
     /**
-     * Obtient la position d'une transaction dans le mempool
+     * Get the position of a transaction in the mempool
      */
     public int getPosition(Transaction transaction) {
         return mempool.getPosition(transaction);
     }
     
     /**
-     * Estime le temps d'attente pour une transaction
+     * Estimate waiting time for a transaction
      */
     public Duration estimateWaitingTime(Transaction transaction) {
         return mempool.estimateWaitingTime(transaction);
     }
     
     /**
-     * Retourne l'état actuel du mempool trié par frais
+     * Get the current state of the mempool sorted by fees
      */
     public List<Transaction> getMempoolState() {
         return mempool.getTransactionsByFees();
     }
     
     /**
-     * Simule la confirmation de transactions (retire du mempool)
+     * Simulate confirming transactions (remove from mempool)
      */
     public List<Transaction> confirmTransactions(int count) {
         List<Transaction> txToConfirm = mempool.getTransactionsByFees();
@@ -105,34 +105,34 @@ public class MempoolService {
             mempool.removeTransaction(tx);
             confirmed.add(tx);
             
-            LoggerUtil.logTransaction(tx.getId(), "CONFIRMED", "Retiré du mempool");
+            LoggerUtil.logTransaction(tx.getId(), "CONFIRMED", "Removed from mempool");
         }
         
         return confirmed;
     }
     
     /**
-     * Retourne la taille actuelle du mempool
+     * Get current mempool size
      */
     public int getSize() {
         return mempool.size();
     }
     
     /**
-     * Vérifie si le mempool est vide
+     * Check if mempool is empty
      */
     public boolean isEmpty() {
         return mempool.isEmpty();
     }
     
     /**
-     * Retourne des statistiques détaillées du mempool
+     * Get detailed statistics of the mempool
      */
     public String getMempoolStats() {
         List<Transaction> transactions = mempool.getTransactionsByFees();
         
         if (transactions.isEmpty()) {
-            return "Mempool vide";
+            return "Mempool is empty";
         }
         
         double highestFees = transactions.get(0).getFees();
@@ -142,7 +142,7 @@ public class MempoolService {
                 .average()
                 .orElse(0.0);
         
-        return String.format("Mempool: %d transactions | Frais: %.8f (min) - %.8f (max) - %.8f (moy)", 
+        return String.format("Mempool: %d transactions | Fees: %.8f (min) - %.8f (max) - %.8f (avg)", 
             transactions.size(), lowestFees, highestFees, avgFees);
     }
 }

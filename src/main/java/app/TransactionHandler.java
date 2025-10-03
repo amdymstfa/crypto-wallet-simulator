@@ -31,7 +31,8 @@ public class TransactionHandler {
             System.out.println("Choose cryptocurrency:");
             System.out.println("1. Bitcoin");
             System.out.println("2. Ethereum");
-            int cryptoChoice = inputReader.readInt("\n👉 Your choice: ");
+            // int cryptoChoice = inputReader.readInt("\n👉 Your choice: ");
+            int cryptoChoice = inputReader.readIntInRange("\n👉 Your choice: ", 1, 2);
             CryptoType type = (cryptoChoice == 1) ? CryptoType.BITCOIN : CryptoType.ETHEREUM;
             
             // Get addresses
@@ -51,7 +52,8 @@ public class TransactionHandler {
             System.out.println("2. STANDARD - " + FeeLevel.STANDARD.getDescription());
             System.out.println("3. RAPIDE - " + FeeLevel.RAPIDE.getDescription());
             
-            int feeLevelChoice = inputReader.readInt("\n👉 Your choice: ");
+            // int feeLevelChoice = inputReader.readInt("\n👉 Your choice: ");
+            int feeLevelChoice = inputReader.readIntInRange("\n👉 Your choice: ", 1, 3);
             FeeLevel feeLevel = FeeLevel.values()[feeLevelChoice - 1];
             
             // Create transaction

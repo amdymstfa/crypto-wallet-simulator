@@ -33,7 +33,8 @@ public class WalletHandler {
             System.out.println("1. Bitcoin (BTC)");
             System.out.println("2. Ethereum (ETH)");
             
-            int typeChoice = inputReader.readInt("\n👉 Your choice: ");
+            // int typeChoice = inputReader.readInt("\n👉 Your choice: ");
+            int typeChoice = inputReader.readIntInRange("\n👉 Your choice: ", 1, 2);
             CryptoType type = (typeChoice == 1) ? CryptoType.BITCOIN : CryptoType.ETHEREUM;
             
             // Create wallet

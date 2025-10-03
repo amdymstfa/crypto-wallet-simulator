@@ -4,34 +4,34 @@ import model.Transaction;
 import enums.FeeLevel;
 
 /**
- * Interface Strategy pour le calcul des frais selon le type de cryptomonnaie
+ * Strategy interface for calculating fees based on cryptocurrency type
  */
 public interface FeeCalculator {
     
     /**
-     * Calcule les frais pour une transaction donnée
-     * @param transaction La transaction à traiter
-     * @return Le montant des frais calculés
+     * Calculate fees for a given transaction
+     * @param transaction The transaction to process
+     * @return Calculated fee amount
      */
     double calculateFees(Transaction transaction);
     
     /**
-     * Calcule les frais pour un montant et niveau donnés
-     * @param amount Le montant de la transaction
-     * @param feeLevel Le niveau de priorité des frais
-     * @return Le montant des frais calculés
+     * Calculate fees for a given amount and fee level
+     * @param amount Transaction amount
+     * @param feeLevel Fee priority level
+     * @return Calculated fee amount
      */
     double calculateFees(double amount, FeeLevel feeLevel);
     
     /**
-     * Obtient les frais de base pour ce type de crypto
-     * @return Les frais de base
+     * Get the base fee for this cryptocurrency type
+     * @return Base fee amount
      */
     double getBaseFee();
     
     /**
-     * Obtient le nom du calculateur (pour logs/debug)
-     * @return Le nom du calculateur
+     * Get the calculator name (for logging/debugging)
+     * @return Calculator name
      */
     String getCalculatorName();
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 /**
- * Service de gestion des wallets
+ * Service to manage wallets
  */
 public class WalletService {
     
@@ -19,13 +19,13 @@ public class WalletService {
     
     public WalletService() {
         this.wallets = new HashMap<>();
-        LoggerUtil.logInfo("WalletService initialisé");
+        LoggerUtil.logInfo("WalletService initialized");
     }
     
     /**
-     * Crée un nouveau wallet selon le type de cryptomonnaie
-     * @param type Le type de cryptomonnaie
-     * @return Le wallet créé
+     * Create a new wallet for a given crypto type
+     * @param type Crypto type
+     * @return Created wallet
      */
     public Wallet createWallet(CryptoType type) {
         Wallet wallet;
@@ -38,21 +38,21 @@ public class WalletService {
                 wallet = new EthereumWallet();
                 break;
             default:
-                throw new IllegalArgumentException("Type de crypto non supporté : " + type);
+                throw new IllegalArgumentException("Unsupported crypto type: " + type);
         }
         
         wallets.put(wallet.getId(), wallet);
-        LoggerUtil.logInfo(String.format("Wallet créé: %s [%s]", 
+        LoggerUtil.logInfo(String.format("Wallet created: %s [%s]", 
             wallet.getId().substring(0, 8), type));
         
         return wallet;
     }
     
     /**
-     * Trouve un wallet par son ID
-     * @param walletId L'ID du wallet
-     * @return Le wallet trouvé
-     * @throws WalletNotFoundException Si le wallet n'existe pas
+     * Find wallet by ID
+     * @param walletId Wallet ID
+     * @return Found wallet
+     * @throws WalletNotFoundException if wallet does not exist
      */
     public Wallet findById(String walletId) throws WalletNotFoundException {
         Wallet wallet = wallets.get(walletId);
@@ -63,9 +63,9 @@ public class WalletService {
     }
     
     /**
-     * Trouve un wallet par son adresse
-     * @param address L'adresse du wallet
-     * @return Optional contenant le wallet ou empty
+     * Find wallet by address
+     * @param address Wallet address
+     * @return Optional containing wallet or empty
      */
     public Optional<Wallet> findByAddress(String address) {
         return wallets.values().stream()
@@ -74,17 +74,17 @@ public class WalletService {
     }
     
     /**
-     * Liste tous les wallets
-     * @return Liste de tous les wallets
+     * Get all wallets
+     * @return List of all wallets
      */
     public List<Wallet> getAllWallets() {
         return new ArrayList<>(wallets.values());
     }
     
     /**
-     * Liste les wallets d'un type spécifique
-     * @param type Le type de cryptomonnaie
-     * @return Liste des wallets de ce type
+     * Get wallets of a specific type
+     * @param type Crypto type
+     * @return List of wallets of that type
      */
     public List<Wallet> getWalletsByType(CryptoType type) {
         return wallets.values().stream()
@@ -93,10 +93,10 @@ public class WalletService {
     }
     
     /**
-     * Met à jour le solde d'un wallet
-     * @param walletId L'ID du wallet
-     * @param newBalance Le nouveau solde
-     * @throws WalletNotFoundException Si le wallet n'existe pas
+     * Update wallet balance
+     * @param walletId Wallet ID
+     * @param newBalance New balance
+     * @throws WalletNotFoundException if wallet does not exist
      */
     public void updateBalance(String walletId, double newBalance) throws WalletNotFoundException {
         Wallet wallet = findById(walletId);
@@ -104,22 +104,22 @@ public class WalletService {
     }
     
     /**
-     * Supprime un wallet (avec vérification de sécurité)
-     * @param walletId L'ID du wallet à supprimer
-     * @return true si supprimé avec succès
+     * Delete a wallet (only if balance is 0)
+     * @param walletId Wallet ID
+     * @return true if deleted successfully
      */
     public boolean deleteWallet(String walletId) {
         Wallet wallet = wallets.get(walletId);
         if (wallet != null && wallet.getBalance() == 0.0) {
             wallets.remove(walletId);
-            LoggerUtil.logInfo(String.format("Wallet supprimé: %s", walletId.substring(0, 8)));
+            LoggerUtil.logInfo(String.format("Wallet deleted: %s", walletId.substring(0, 8)));
             return true;
         }
         return false;
     }
     
     /**
-     * Statistiques des wallets
+     * Wallet statistics
      */
     public String getWalletStats() {
         long bitcoinCount = wallets.values().stream()

@@ -5,15 +5,15 @@ import enums.FeeLevel;
 import util.LoggerUtil;
 
 /**
- * Calculateur de frais spécifique pour Bitcoin
- * Utilise : taille estimée en bytes × tarif satoshi par byte
+ * Bitcoin-specific fee calculator
+ * Formula: estimated size in bytes × satoshi per byte rate
  */
 public class BitcoinFeeCalculator implements FeeCalculator {
     
-    // Paramètres Bitcoin réalistes (valeurs fictives mais cohérentes)
-    private static final int AVERAGE_TX_SIZE_BYTES = 250;  // Taille moyenne transaction Bitcoin
-    private static final double SATOSHI_PER_BYTE_BASE = 20.0;  // Satoshi par byte (base)
-    private static final double SATOSHI_TO_BTC = 0.00000001;   // 1 satoshi = 0.00000001 BTC
+    // Realistic Bitcoin parameters (fictional but coherent)
+    private static final int AVERAGE_TX_SIZE_BYTES = 250;  
+    private static final double SATOSHI_PER_BYTE_BASE = 20.0;  
+    private static final double SATOSHI_TO_BTC = 0.00000001;  
     
     @Override
     public double calculateFees(Transaction transaction) {
@@ -22,13 +22,13 @@ public class BitcoinFeeCalculator implements FeeCalculator {
     
     @Override
     public double calculateFees(double amount, FeeLevel feeLevel) {
-        // Calcul Bitcoin : taille × tarif par byte × multiplicateur de priorité
+        // Bitcoin fee: size × rate per byte × priority multiplier
         double satoshiPerByte = SATOSHI_PER_BYTE_BASE * feeLevel.getMultiplier();
         double totalSatoshi = AVERAGE_TX_SIZE_BYTES * satoshiPerByte;
         double feesInBTC = totalSatoshi * SATOSHI_TO_BTC;
         
         LoggerUtil.logFeeCalculation("BITCOIN_CALC", feesInBTC, 
-            String.format("Niveau: %s, Sat/byte: %.2f", feeLevel, satoshiPerByte));
+            String.format("Level: %s, Sat/byte: %.2f", feeLevel, satoshiPerByte));
         
         return feesInBTC;
     }
@@ -44,7 +44,7 @@ public class BitcoinFeeCalculator implements FeeCalculator {
     }
     
     /**
-     * Méthode spécifique Bitcoin pour calculer selon la taille réelle
+     * Bitcoin-specific method to calculate fee for a custom transaction size
      */
     public double calculateFeesWithSize(int transactionSizeBytes, FeeLevel feeLevel) {
         double satoshiPerByte = SATOSHI_PER_BYTE_BASE * feeLevel.getMultiplier();
@@ -53,11 +53,11 @@ public class BitcoinFeeCalculator implements FeeCalculator {
     }
     
     /**
-     * Informations de debug sur les paramètres Bitcoin
+     * Returns debug information about Bitcoin fee calculation
      */
     public String getCalculationDetails(FeeLevel feeLevel) {
         double satoshiPerByte = SATOSHI_PER_BYTE_BASE * feeLevel.getMultiplier();
-        return String.format("Bitcoin - Taille: %d bytes, Tarif: %.2f sat/byte, Multiplicateur: %.1fx",
+        return String.format("Bitcoin - Size: %d bytes, Rate: %.2f sat/byte, Multiplier: %.1fx",
             AVERAGE_TX_SIZE_BYTES, satoshiPerByte, feeLevel.getMultiplier());
     }
 }

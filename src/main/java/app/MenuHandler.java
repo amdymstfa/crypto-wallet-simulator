@@ -31,7 +31,8 @@ public class MenuHandler {
         ConsolePrinter.clearScreen();
         ConsolePrinter.printMainMenu();
         
-        int choice = inputReader.readInt("");
+        // Validate menu choice (0-7)
+        int choice = inputReader.readIntInRange("", 0, 7);
         
         try {
             switch (choice) {

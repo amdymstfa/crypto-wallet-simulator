@@ -1,229 +1,312 @@
-# 🪙 Crypto Wallet Simulator
+# Crypto Wallet Simulator
 
-Application console Java 8 simulant un portefeuille crypto avec mempool pour optimiser les frais de transaction.
+A Java 8 console application simulating a cryptocurrency wallet with mempool functionality to optimize transaction fees.
 
 ![Java](https://img.shields.io/badge/Java-8-orange)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-blue)
 ![JDBC](https://img.shields.io/badge/JDBC-42.6.0-green)
-![Status](https://img.shields.io/badge/Status-Completed-success)
+![Status](https://img.shields.io/badge/Status-Production-success)
 
-## 📋 Description
+## Description
 
-Ce projet simule le fonctionnement d'un wallet crypto avec un système de mempool (file d'attente de transactions). Les utilisateurs peuvent créer des wallets Bitcoin ou Ethereum, effectuer des transactions avec différents niveaux de frais, et visualiser leur position dans le mempool pour estimer le temps de confirmation.
+This project simulates a crypto wallet with a mempool (transaction queue) system. Users can create Bitcoin or Ethereum wallets, perform transactions with different fee levels, and visualize their position in the mempool to estimate confirmation time.
 
-### 🎯 Objectifs Pédagogiques
+### Educational Objectives
 
-- **Architecture en couches** : Présentation, Métier, Données, Utilitaire
-- **Design Patterns** : Singleton, Repository, Strategy, Template Method, Factory
-- **Principes SOLID** : Respect strict des 5 principes
-- **PostgreSQL/JDBC** : Persistence des données
-- **Java 8** : Stream API, Optional, LocalDateTime
+- **Layered Architecture**: Presentation, Business, Data, Utility layers
+- **Design Patterns**: Singleton, Repository, Strategy, Template Method, Factory
+- **SOLID Principles**: Strict adherence to all 5 principles
+- **PostgreSQL/JDBC**: Data persistence
+- **Java 8**: Stream API, Optional, LocalDateTime
 
-## ✨ Fonctionnalités
+## Features
 
-### 1️⃣ Créer un Wallet Crypto
-- Choix entre Bitcoin (BTC) et Ethereum (ETH)
-- Génération automatique d'adresse valide selon le format
-- Initialisation du solde
-- Sauvegarde en base de données
+### 1. Create Crypto Wallet
+- Choose between Bitcoin (BTC) and Ethereum (ETH)
+- Automatic valid address generation according to format
+- Balance initialization
+- Database persistence
 
-### 2️⃣ Créer une Transaction
-- Validation des adresses (formats BTC/ETH)
-- Sélection du niveau de frais (ECONOMIQUE, STANDARD, RAPIDE)
-- Calcul automatique des frais selon le type de crypto
-- Ajout au mempool avec statut PENDING
+### 2. Create Transaction
+- Address validation (BTC/ETH formats)
+- Fee level selection (ECONOMIQUE, STANDARD, RAPIDE)
+- Automatic fee calculation based on crypto type
+- Mempool addition with PENDING status
 
-### 3️⃣ Position dans le Mempool
-- Affichage de la position dans la file d'attente
-- Estimation du temps de confirmation (Position × 10 min)
-- Indicateur visuel de priorité
+### 3. Mempool Position
+- Queue position display
+- Confirmation time estimation (Position × 10 min)
+- Visual priority indicator
 
-### 4️⃣ Comparaison des Niveaux de Frais
-- Tableau comparatif ASCII élégant
-- Frais calculés pour chaque niveau
-- Position estimée dans le mempool
-- Temps d'attente pour chaque option
+### 4. Fee Levels Comparison
+- Elegant ASCII comparative table
+- Calculated fees for each level
+- Estimated mempool position
+- Waiting time for each option
 
-### 5️⃣ État du Mempool
-- Liste des transactions en attente triées par frais
-- Visualisation des transactions anonymes
-- Identification de votre transaction
-- Statistiques (min, max, moyenne des frais)
+### 5. Mempool State
+- Sorted pending transactions list by fees
+- Anonymous transactions visualization
+- Your transaction identification
+- Statistics (min, max, average fees)
 
-### 6️⃣ Mes Wallets
-- Liste de tous vos wallets créés
-- Solde de chaque wallet
-- Identification du wallet actuel
+### 6. My Wallets
+- List of all created wallets
+- Balance for each wallet
+- Current wallet identification
 
-### 7️⃣ Statistiques Globales
-- Statistiques des wallets (nombre, soldes totaux)
-- Statistiques des transactions (pending, confirmées)
-- Statistiques du mempool (taille, frais moyens)
-- Statistiques de la base de données
+### 7. Global Statistics
+- Wallet statistics (count, total balances)
+- Transaction statistics (pending, confirmed)
+- Mempool statistics (size, average fees)
+- Database statistics
 
-## 🏛️ Architecture
+## Architecture
 
-### Structure en Couches
+### Layered Structure
 
 ```
 ┌─────────────────────────────────────┐
-│   Couche Présentation (UI/Menu)    │
-│         app/Main.java               │
+│   Presentation Layer (UI/Menu)      │
+│   app/ (8 handler classes)          │
 └────────────────┬────────────────────┘
                  │
 ┌────────────────┴────────────────────┐
-│       Couche Métier (Services)      │
-│  WalletService, TransactionService  │
-│  MempoolService, FeeCalculators     │
+│   Business Layer (Services)         │
+│   service/ (6 service classes)      │
 └────────────────┬────────────────────┘
                  │
 ┌────────────────┴────────────────────┐
-│    Couche Données (Repositories)    │
-│  WalletRepository                   │
-│  TransactionRepository              │
+│   Data Layer (Repositories)         │
+│   repository/ (4 classes + base)    │
 └────────────────┬────────────────────┘
                  │
 ┌────────────────┴────────────────────┐
-│       PostgreSQL Database           │
-│    Tables: wallets, transactions    │
+│   PostgreSQL Database               │
+│   Tables: wallets, transactions     │
 └─────────────────────────────────────┘
 ```
 
-### Design Patterns Implémentés
+### Design Patterns Implemented
 
-| Pattern | Implémentation | Objectif |
-|---------|----------------|----------|
-| **Singleton** | `DatabaseConnection` | Une seule instance de connexion DB |
-| **Repository** | `WalletRepository`, `TransactionRepository` | Abstraction de la persistance |
-| **Strategy** | `FeeCalculator` + implémentations | Calculs de frais polymorphes |
-| **Template Method** | `Wallet` abstract | Réutilisation du code commun |
-| **Factory** | `WalletService.createWallet()` | Création d'objets selon le type |
+| Pattern | Implementation | Purpose |
+|---------|----------------|---------|
+| **Singleton** | `DatabaseConnection`, `ApplicationContext` | Single instance management |
+| **Repository** | `BaseRepository` + implementations | Data persistence abstraction |
+| **Strategy** | `FeeCalculator` + implementations | Polymorphic fee calculations |
+| **Template Method** | `Wallet` abstract class | Code reuse |
+| **Factory** | `WalletService.createWallet()` | Type-based object creation |
 
-### Principes SOLID
+### SOLID Principles
 
-✅ **S**ingle Responsibility : Chaque classe a une seule responsabilité  
-✅ **O**pen/Closed : Extensible sans modification (interfaces, abstract)  
-✅ **L**iskov Substitution : BitcoinWallet/EthereumWallet interchangeables  
-✅ **I**nterface Segregation : Interfaces minimales et ciblées  
-✅ **D**ependency Inversion : Dépendance aux abstractions  
+- **Single Responsibility**: Each class has one responsibility
+- **Open/Closed**: Extensible without modification
+- **Liskov Substitution**: BitcoinWallet/EthereumWallet interchangeable
+- **Interface Segregation**: Minimal, targeted interfaces
+- **Dependency Inversion**: Depends on abstractions
 
-## 🛠️ Technologies Utilisées
+## Project Structure
 
-- **Java 8** - Langage principal
-- **PostgreSQL 12+** - Base de données relationnelle
-- **JDBC 42.6.0** - Driver de connexion PostgreSQL
-- **Java Util Logging** - Système de logging
-- **Java Time API** - Gestion des dates et durées
-- **Stream API** - Manipulation fonctionnelle des collections
+```
+crypto-wallet-simulator/
+├── bin/                              # Compiled .class files (gitignored)
+│   ├── app/                         # 8 application classes
+│   ├── enums/                       # 3 enum classes
+│   ├── exception/                   # 5 exception classes
+│   ├── model/                       # 5 model classes
+│   ├── repository/                  # 4 repository classes
+│   ├── service/                     # 6 service classes
+│   └── util/                        # 6 utility classes
+├── lib/
+│   └── postgresql-42.6.0.jar       # JDBC driver
+├── sql/
+│   └── schema.sql                   # Database schema
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   ├── app/
+│   │   │   │   ├── ApplicationContext.java
+│   │   │   │   ├── InputReader.java
+│   │   │   │   ├── Main.java
+│   │   │   │   ├── MenuHandler.java
+│   │   │   │   ├── WalletHandler.java
+│   │   │   │   ├── TransactionHandler.java
+│   │   │   │   ├── MempoolHandler.java
+│   │   │   │   └── StatisticsHandler.java
+│   │   │   ├── enums/
+│   │   │   │   ├── CryptoType.java
+│   │   │   │   ├── FeeLevel.java
+│   │   │   │   └── TransactionStatus.java
+│   │   │   ├── exception/
+│   │   │   │   ├── InvalidAddressException.java
+│   │   │   │   ├── InvalidAmountException.java
+│   │   │   │   ├── TransactionException.java
+│   │   │   │   └── WalletNotFoundException.java
+│   │   │   ├── model/
+│   │   │   │   ├── BitcoinWallet.java
+│   │   │   │   ├── EthereumWallet.java
+│   │   │   │   ├── Mempool.java
+│   │   │   │   ├── Transaction.java
+│   │   │   │   └── Wallet.java
+│   │   │   ├── repository/
+│   │   │   │   ├── BaseRepository.java
+│   │   │   │   ├── MempoolRepository.java
+│   │   │   │   ├── TransactionRepository.java
+│   │   │   │   └── WalletRepository.java
+│   │   │   ├── service/
+│   │   │   │   ├── BitcoinFeeCalculator.java
+│   │   │   │   ├── EthereumFeeCalculator.java
+│   │   │   │   ├── FeeCalculator.java
+│   │   │   │   ├── MempoolService.java
+│   │   │   │   ├── TransactionService.java
+│   │   │   │   └── WalletService.java
+│   │   │   └── util/
+│   │   │       ├── AddressValidator.java
+│   │   │       ├── ConsolePrinter.java
+│   │   │       ├── DatabaseConnection.java
+│   │   │       ├── EnvLoader.java
+│   │   │       ├── LoggerUtil.java
+│   │   │       └── UUIDGenerator.java
+│   │   └── resources/
+│   └── test/
+│       └── java/
+├── .env                             # Database configuration
+├── .gitignore                       # Git ignore rules
+├── compile.sh                       # Compilation script
+├── run.sh                          # Execution script
+├── CryptoWallet.log                # Application logs
+└── README.md
+```
 
-## 📦 Prérequis
+## Technologies Used
 
-- JDK 8 (exactement, pas de version supérieure)
-- PostgreSQL 12+ installé et démarré
-- Driver JDBC PostgreSQL (`postgresql-42.6.0.jar`)
-- 100 MB d'espace disque
-- Terminal avec support UTF-8 (pour les tableaux ASCII)
+- **Java 8** - Main language
+- **PostgreSQL 12+** - Relational database
+- **JDBC 42.6.0** - PostgreSQL connection driver
+- **Java Util Logging** - Logging system
+- **Java Time API** - Date and duration management
+- **Stream API** - Functional collection manipulation
 
-## 🚀 Installation
+## Prerequisites
 
-### 1. Cloner le projet
+- JDK 8 (exactly, no higher version)
+- PostgreSQL 12+ installed and running
+- PostgreSQL JDBC Driver (`postgresql-42.6.0.jar`)
+- 100 MB disk space
+- Terminal with UTF-8 support (for ASCII tables)
+
+## Installation
+
+### 1. Clone the project
 
 ```bash
-git clone https://github.com/votre-username/crypto-wallet-simulator.git
+git clone https://github.com/your-username/crypto-wallet-simulator.git
 cd crypto-wallet-simulator
 ```
 
-### 2. Configurer PostgreSQL
+### 2. Configure PostgreSQL
 
 ```bash
-# Créer la base de données
+# Create database
 sudo -u postgres psql
 CREATE DATABASE crypto_wallet_db;
-CREATE USER postgres WITH PASSWORD 'postgres';
-GRANT ALL PRIVILEGES ON DATABASE crypto_wallet_db TO postgres;
+CREATE USER your_user WITH PASSWORD 'your_password';
+GRANT ALL PRIVILEGES ON DATABASE crypto_wallet_db TO your_user;
 \q
 
-# Exécuter le script SQL
-psql -U postgres -d crypto_wallet_db -f sql/schema.sql
+# Execute SQL script
+psql -U your_user -d crypto_wallet_db -f sql/schema.sql
 ```
 
-### 3. Télécharger le Driver JDBC
+### 3. Configure environment
+
+```bash
+# Create .env file at project root
+cat > .env << 'EOF'
+DB_URL=jdbc:postgresql://localhost:5432/crypto_wallet_db
+DB_USER=your_user
+DB_PASSWORD=your_password
+EOF
+```
+
+### 4. Download JDBC Driver
 
 ```bash
 cd lib/
 wget https://jdbc.postgresql.org/download/postgresql-42.6.0.jar
 ```
 
-### 4. Compiler le projet
+### 5. Compile the project
 
 ```bash
-cd src/main/java
-javac -cp ".:../../../lib/postgresql-42.6.0.jar" \
-  enums/*.java exception/*.java util/*.java \
-  model/*.java service/*.java repository/*.java \
-  app/Main.java
+# Make scripts executable
+chmod +x compile.sh run.sh
+
+# Compile
+./compile.sh
 ```
 
-### 5. Lancer l'application
+### 6. Launch application
 
 ```bash
-java -cp ".:../../../lib/postgresql-42.6.0.jar" app.Main
+./run.sh
 ```
 
-## 📖 Guide d'Utilisation
+## Usage Guide
 
-### Créer un Wallet
+### Create Wallet
 
-1. Sélectionnez l'option `1` dans le menu
-2. Choisissez le type (Bitcoin ou Ethereum)
-3. Une adresse unique est générée automatiquement
-4. Optionnel : Initialisez un solde de test
+1. Select option `1` from menu
+2. Choose type (Bitcoin or Ethereum)
+3. Unique address automatically generated
+4. Optional: Initialize test balance
 
-### Créer une Transaction
+### Create Transaction
 
-1. Assurez-vous d'avoir un wallet créé
-2. Sélectionnez l'option `2`
-3. Entrez l'adresse de destination (format valide requis)
-4. Entrez le montant à envoyer
-5. Choisissez le niveau de frais :
-   - **ECONOMIQUE** : Lent (30-60 min), frais × 0.5
-   - **STANDARD** : Moyen (10-20 min), frais × 1.0
-   - **RAPIDE** : Rapide (1-5 min), frais × 2.0
+1. Ensure you have a created wallet
+2. Select option `2`
+3. Enter destination address (valid format required)
+4. Enter amount to send
+5. Choose fee level:
+   - **ECONOMIQUE**: Slow (30-60 min), fees × 0.5
+   - **STANDARD**: Medium (10-20 min), fees × 1.0
+   - **RAPIDE**: Fast (1-5 min), fees × 2.0
 
-### Comparer les Frais
+### Compare Fees
 
-1. Sélectionnez l'option `4`
-2. Choisissez le type de crypto
-3. Entrez le montant
-4. Un tableau comparatif s'affiche avec :
-   - Frais pour chaque niveau
-   - Position estimée dans le mempool
-   - Temps d'attente estimé
+1. Select option `4`
+2. Choose crypto type
+3. Enter amount
+4. Comparative table displays with:
+   - Fees for each level
+   - Estimated mempool position
+   - Estimated waiting time
 
-## 📊 Captures d'Écran
+## Screenshots
 
+### Main Menu
 ```
-═══════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════
             🪙 CRYPTO WALLET SIMULATOR 🪙
-═══════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════
 
-1️⃣  Créer un wallet crypto
-2️⃣  Créer une nouvelle transaction
-3️⃣  Voir ma position dans le mempool
-4️⃣  Comparer les 3 niveaux de frais
-5️⃣  Consulter l'état du mempool
-6️⃣  Afficher mes wallets
-7️⃣  Statistiques globales
-0️⃣  Quitter
+1️⃣  Create crypto wallet
+2️⃣  Create new transaction
+3️⃣  View position in mempool
+4️⃣  Compare 3 fee levels
+5️⃣  View mempool state
+6️⃣  Display my wallets
+7️⃣  Global statistics
+0️⃣  Quit
 ────────────────────────────────────────────────────────────
-👉 Votre choix :
+👉 Your choice:
 ```
 
-### Tableau de Comparaison des Frais
+### Fee Comparison Table
 
 ```
 ┌───────────────┬──────────────────┬───────────────┬────────────────────┐
-│ Niveau        │ Frais (BTC)      │ Position      │ Temps estimé       │
+│ Level         │ Fees (BTC)       │ Position      │ Estimated time     │
 ├───────────────┼──────────────────┼───────────────┼────────────────────┤
 │ ECONOMIQUE    │ 0.00002500       │ ~15           │ 150 min            │
 │ STANDARD      │ 0.00005000       │ ~8            │ 80 min             │
@@ -231,101 +314,105 @@ java -cp ".:../../../lib/postgresql-42.6.0.jar" app.Main
 └───────────────┴──────────────────┴───────────────┴────────────────────┘
 ```
 
-## 🗄️ Structure de la Base de Données
+## Database Structure
 
-### Table : wallets
+### wallets table
 
-| Colonne | Type | Description |
+| Column | Type | Description |
 |---------|------|-------------|
-| id | VARCHAR(36) | UUID unique |
-| address | VARCHAR(100) | Adresse crypto unique |
-| crypto_type | VARCHAR(20) | BITCOIN ou ETHEREUM |
-| balance | DECIMAL(20,8) | Solde en unités crypto |
-| created_at | TIMESTAMP | Date de création |
+| id | VARCHAR(36) | Unique UUID |
+| address | VARCHAR(100) | Unique crypto address |
+| crypto_type | VARCHAR(20) | BITCOIN or ETHEREUM |
+| balance | DECIMAL(20,8) | Balance in crypto units |
+| created_at | TIMESTAMP | Creation date |
 
-### Table : transactions
+### transactions table
 
-| Colonne | Type | Description |
+| Column | Type | Description |
 |---------|------|-------------|
-| id | VARCHAR(36) | UUID unique |
-| from_address | VARCHAR(100) | Adresse source |
-| to_address | VARCHAR(100) | Adresse destination |
-| amount | DECIMAL(20,8) | Montant transféré |
-| fees | DECIMAL(20,8) | Frais de transaction |
-| crypto_type | VARCHAR(20) | BITCOIN ou ETHEREUM |
+| id | VARCHAR(36) | Unique UUID |
+| from_address | VARCHAR(100) | Source address |
+| to_address | VARCHAR(100) | Destination address |
+| amount | DECIMAL(20,8) | Transferred amount |
+| fees | DECIMAL(20,8) | Transaction fees |
+| crypto_type | VARCHAR(20) | BITCOIN or ETHEREUM |
 | fee_level | VARCHAR(20) | ECONOMIQUE, STANDARD, RAPIDE |
 | status | VARCHAR(20) | PENDING, CONFIRMED, REJECTED |
-| created_at | TIMESTAMP | Date de création |
+| created_at | TIMESTAMP | Creation date |
 
-## 🧪 Tests
+## Testing
 
-Le projet inclut plusieurs classes de test :
+Run compilation tests:
 
 ```bash
-# Test de connexion DB
-java -cp ".:../../../lib/postgresql-42.6.0.jar" test.DatabaseTest
-
-# Test des repositories
-java -cp ".:../../../lib/postgresql-42.6.0.jar" test.RepositoryTest
-
-# Test des services
-java -cp ".:../../../lib/postgresql-42.6.0.jar" test.ServicesTest
+./compile.sh
 ```
 
-## 📝 Logs
+Run application:
 
-Les logs sont gérés avec `java.util.logging` :
-
-- **System.out.println** : UNIQUEMENT pour l'UI/menu
-- **LoggerUtil** : Pour toutes les erreurs et opérations critiques
-
-Exemple de logs :
-```
-INFO: Wallet créé: 8a3f2b1c [BITCOIN] - Adresse: 1A1zP1eP5QG...
-INFO: TRANSACTION [9b2a1f3d] - CREATED: Fees: 0.00005000 BTC
-SEVERE: Erreur lors de la sauvegarde : Connection refused
+```bash
+./run.sh
 ```
 
-## 🔧 Configuration
+## Logging
 
-Modifier les paramètres de connexion dans `util/DatabaseConnection.java` :
+Logs are managed with `java.util.logging`:
 
-```java
-private static final String URL = "jdbc:postgresql://localhost:5432/crypto_wallet_db";
-private static final String USER = "postgres";
-private static final String PASSWORD = "votre_mot_de_passe";
+- **System.out.println**: ONLY for UI/menu
+- **LoggerUtil**: For all errors and critical operations
+
+Log file: `CryptoWallet.log`
+
+## Configuration
+
+Modify connection parameters in `.env` file:
+
+```properties
+DB_URL=jdbc:postgresql://localhost:5432/crypto_wallet_db
+DB_USER=your_username
+DB_PASSWORD=your_password
 ```
 
-## 🐛 Dépannage
+## Troubleshooting
 
-### Problème : "Driver not found"
-- Vérifiez que `postgresql-42.6.0.jar` est dans `lib/`
-- Ajoutez-le au CLASSPATH
+### Problem: "Driver not found"
+- Check that `postgresql-42.6.0.jar` is in `lib/`
+- Add it to CLASSPATH
 
-### Problème : "Connection refused"
-- Vérifiez que PostgreSQL est démarré : `sudo systemctl status postgresql`
-- Vérifiez les identifiants de connexion
+### Problem: "Connection refused"
+- Check PostgreSQL is running: `sudo systemctl status postgresql`
+- Verify connection credentials in `.env`
 
-### Problème : Caractères ASCII mal affichés
-- Configurez votre terminal en UTF-8
-- Sur Windows, utilisez `chcp 65001`
+### Problem: ASCII characters not displaying properly
+- Configure terminal in UTF-8
+- On Windows, use `chcp 65001`
 
-## 👥 Auteur
+### Problem: ".env not found"
+- Ensure `.env` is at project root
+- Check file permissions
 
-**Moustapha** - Développeur Java  
-📧 Email: votre.email@example.com  
-🔗 LinkedIn: [Votre profil](https://linkedin.com/in/votre-profil)
+## Project Management
 
-## 📄 Licence
+- **Git**: Feature branch workflow
+- **Commits**: Clear, descriptive messages following conventions
+- **JIRA**: Task tracking and sprint planning
 
-Ce projet est développé dans un cadre pédagogique.
+## Author
 
-## 🙏 Remerciements
+**Moustapha** - Java Developer  
+📧 Email: moustapha@example.com  
+🔗 GitHub: [your-profile](https://github.com/your-profile)
 
-- Anthropic (Claude) pour l'inspiration
-- Communauté PostgreSQL
-- Ressources Java officielles d'Oracle
+## License
+
+This project is developed for educational purposes.
+
+## Acknowledgments
+
+- PostgreSQL Community
+- Oracle Java Official Resources
+- Open Source Contributors
 
 ---
 
-⭐ **Si ce projet vous a aidé, n'hésitez pas à lui donner une étoile !**
+⭐ **If this project helped you, please give it a star
